@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>İpek Chatbot</title>
+    <style>
+      body {
+        font-family: Arial;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+      .send-button {
+        background-color: rgb(25, 135, 84);
+        color: white;
+        padding: 12px 20px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .chat-input {
+        padding: 12px 15px;
+        border-radius: 10px;
+        border-width: 1px;
+        font-size: 15px;
+        flex-grow: 1;
+      }
+      .chat-input-container {
+        display: flex;
+        margin-bottom: 60px;
+      }
+      .app-container {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .chat-message-mert {
+        display: flex;
+        justify-content: end;
+        align-items: start;
+      }
+      .chat-message-bot {
+        display: flex;
+        justify-content: start;
+        align-items: start;
+      }
+      .chat-message-text {
+        background-color: rgb(238, 238, 238);
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-bottom: 20px;
+        max-width: 300px;
+      }
+      .chat-message-profile {
+        width: 45px;
+      }
+      .chat-messages-container {
+        flex-grow: 1;
+        margin-top: 20px;
+        overflow: scroll;
+        scrollbar-width: none;
+      }
+      .no-messages {
+        text-align: center;
+        color: gray;
+        margin-top: 20px;
+      }
+      .loading-spinner {
+        width: 30px;
+        height: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="js-welcome-container"></div>
+    <div class="js-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+    <script src="https://unpkg.com/supersimpledev/chatbot.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+      function WelcomePart() {
+        return (
+          <div>
+            <h1>Hoş geldin</h1>
+            <input placeholder="Email" />
+            <br></br>
+            <input placeholder="Şifre" type="password" />
+            <br></br>
+            <button>Giriş</button>
+            <button>Kayıt Ol</button>
+            <br></br>
+            <br></br>
+          </div>
+        );
+      }
+
+      function ChatInput({ chatMessages, setChatMessages }) {
+        const [inputText, setInputText] = React.useState("");
+        const [isLoading, setIsLoading] = React.useState(false);
+
+        function handleKeyDown(event) {
+          if (event.key === "Enter") {
+            sendMessage();
+          } else if (event.key === "Escape" || event.key === "Esc") {
+            setInputText("");
+          }
+        }
+
+        function saveInputText(event) {
+          const inputtakiYazi = event.target.value;
+
+          setInputText(inputtakiYazi);
+        }
+
+        async function sendMessage() {
+          if (inputText.trim() === "" || isLoading) {
+            return;
+          }
+
+          const newChatMessages = [
+            ...chatMessages, //coppied array and added a new item
+            {
+              mesajcik: inputText,
+              sender: "mert",
+              id: crypto.randomUUID(),
+            },
+          ];
+
+          setChatMessages(newChatMessages);
+          setInputText(""); //inputu temizlemek için  controlled input yaptık
+          const loading = (
+            <img src="loading-spinner.gif" className="loading-spinner" />
+          );
+          setChatMessages([
+            ...newChatMessages, //coppied array and added a new item
+            {
+              mesajcik: loading,
+              sender: "bot",
+              id: crypto.randomUUID(),
+            },
+          ]);
+          setIsLoading(true);
+          const response = await Chatbot.getResponseAsync(inputText);
+          setIsLoading(false);
+          //remove loading message
+          setChatMessages([
+            ...newChatMessages, //coppied array and added a new item
+            {
+              mesajcik: response,
+              sender: "bot",
+              id: crypto.randomUUID(),
+            },
+          ]);
+        }
+        return (
+          <div className="chat-input-container">
+            <input
+              onKeyDown={handleKeyDown}
+              placeholder="Söyle abine nedir sıkıntı hemen çözelim..."
+              size="50"
+              onChange={saveInputText}
+              value={inputText}
+              className="chat-input"
+            />
+
+            <button
+              disabled={isLoading}
+              onClick={sendMessage}
+              className="send-button"
+            >
+              Send
+            </button>
+          </div>
+        );
+      }
+
+      function ChatMessage({ mesajcik, sender }) {
+        console.log(mesajcik);
+
+        //   // const mesajcik = props.mesaj;
+        //   // const sender = props.sender;
+        //   //bu ikisini kısaca aşağıdaki gibi yazabiliriz
+        //   // const {mesajcik, sender}  = props;
+        //   // bu üsttekini parametre olarak fonksiyona da yazabiliriz,
+        //   // önceden props yazıyorduk şimdi direk ({mesajcik, sender}) yazdık
+
+        //   /*
+        // if(sender === "bot"){
+        //   return (
+        //     <div>
+        //       <img src="robot.png" width="30" height="30"/>
+        //       {mesajcik}
+        //     </div>
+        //    );
+
+        // } bu koda gerek yok artık çünkü aşağıda && operatörü ile yapıyoruz
+
+        // */
+        return (
+          <div
+            className={
+              sender === "mert" ? "chat-message-mert" : "chat-message-bot"
+            }
+          >
+            {sender === "bot" && (
+              <img src="robot.png" className="chat-message-profile" />
+            )}
+            <div className="chat-message-text">{mesajcik}</div>
+            {sender === "mert" && (
+              <img src="user.png" className="chat-message-profile" />
+            )}
+          </div>
+        );
+      }
+
+      function WelcomeApp() {
+        return (
+          <>
+            <WelcomePart />
+          </>
+        );
+      }
+      function useAutoScroll(dependencies) {
+        const containerRef = React.useRef(null);
+        React.useEffect(() => {
+          const containerElem = containerRef.current;
+
+          if (containerElem) {
+            console.log(containerElem.scrollHeight);
+            containerElem.scrollTop = containerElem.scrollHeight;
+          }
+        }, dependencies);
+        return containerRef;
+      }
+
+      function ChatMessages({ chatMessages }) {
+        // // const [chatMessages, setChatMessages] = React.useState([
+        // //   { mesajcik: "selam abi", sender: "mert", id: "id1" },
+        // //   { mesajcik: "buyur kardeşim", sender: "bot", id: "id2" },
+        // //   { mesajcik: "bugün ayın kaçı", sender: "mert", id: "id3" },
+        // //   { mesajcik: "23 aralık", sender: "bot", id: "id4" },
+        // // ]);
+
+        // //farklı yazış şekilleri:
+        // //const [chatMessages, setChatMessages] = array; (yukarda array yazıyordu)
+        // //daha da uzun hali:
+        // // const chatMessages = array[0];
+        // // const setChatMessages = array[1];
+
+        // // function sendMessage() {
+        // //   // chatMessages.push({
+        // //   //   mesajcik: "yeni mesaj",
+        // //   //   sender: "mert",
+        // //   //   // id: "id" + (chatMessages.length + 1),
+        // //   //   id: crypto.randomUUID(),
+        // //   // });
+        // //   // console.log(chatMessages);
+        // //   //aşağıda return içinde şu vardı:
+        // //   // <button onClick={sendMessage}>Mesajı Gönder</button>
+        // // }
+        const chatMessagesRef = useAutoScroll([chatMessages]);
+        return (
+          <div className="chat-messages-container" ref={chatMessagesRef}>
+            {chatMessages.map((item) => {
+              return (
+                <ChatMessage
+                  mesajcik={item.mesajcik}
+                  sender={item.sender}
+                  key={item.id}
+                />
+              );
+            })}
+
+            {chatMessages.length === 0 && (
+              <div className="no-messages">Henüz mesaj yok</div>
+            )}
+          </div>
+        );
+      }
+
+      function IpekChatApp() {
+        const [chatMessages, setChatMessages] = React.useState([]);
+        return (
+          <div className="app-container">
+            <ChatMessages chatMessages={chatMessages} />
+            <ChatInput
+              chatMessages={chatMessages}
+              setChatMessages={setChatMessages}
+            />
+          </div>
+        );
+      }
+
+      const container = document.querySelector(".js-container");
+
+      ReactDOM.createRoot(container).render(<IpekChatApp />);
+      //üstte hangisi gözüksün istiyorsan en başta div içinde class tanımlarken onu yazıyorsun
+    </script>
+  </body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>İpek Chatbot</title>
+  </head>
+  <body>
+    
+    <div class="js-container"></div>
+ 
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+ 
+  // function Shopping() {
+  //   return (
+  //     <div>
+  //       <h1>Alışverişe Hoşgeldin</h1>
+  //       <br />Mert'in Ayak Havlusu
+  //       <br />Fiyat: €20
+  //       <br />
+  //       <button>Sepete Ekle</button>
+  //       <br />
+  //       <br />
+  //     </div>
+  //   );
+
+  // }
+
+      function UrunDetayi({urunAdi, fiyat, indirim, imgSrc}) {
+        return (
+          <div>
+            <br />
+            <br />
+            <img style={{ width: "50px", height: "50px", margin: "10px" }} src={imgSrc} />
+            <br />{urunAdi}
+            {indirim ? <p><del>Fiyat: {fiyat} </del></p> :  <p>Fiyat: {fiyat} </p>}
+            {indirim && <p>indirimli fiyat: {indirim}</p>}
+            <button>Sepete Ekle</button>
+          </div>
+        );
+      }
+
+      function ShoppingV2() {
+        return (
+          <div>
+            <h1>Alışverişe Hoşgeldin</h1>
+            <UrunDetayi urunAdi="Mert'in Ayak Havlusu" fiyat="€20" imgSrc="robot.png" />
+            <UrunDetayi urunAdi="Mert'in Ayak Pudrası" fiyat="€25" indirim="€20" imgSrc="user.png" />
+            <UrunDetayi urunAdi="Mert'in Banyo Havlusu" fiyat="€30" imgSrc="robot.png" />
+
+           
+          </div>
+        );
+      }
+
+      const container = document.querySelector('.js-container');
+    
+
+      ReactDOM.createRoot(container).render(<ShoppingV2 />);
+ 
+    </script>
+  </body>
+</html>

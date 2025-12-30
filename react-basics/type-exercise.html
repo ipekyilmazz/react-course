@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Type</title>
+  </head>
+  <body>
+    <div class="js-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+      function TypeApp() {
+        const [inputText, setInputText] = React.useState("");
+
+        function saveInputText(event) {
+          setInputText(event.target.value);
+        }
+
+        return (
+          <>
+            <input
+              placeholder="Enter your name"
+              size="50"
+              onChange={saveInputText}
+              value={inputText}
+            />
+            <button onClick={() => setInputText("")}>Reset</button>
+            <button onClick={() => setInputText("Alice")}>Example</button>
+
+            <p>Hello, {inputText}</p>
+          </>
+        );
+      }
+
+      const container = document.querySelector(".js-container");
+
+      ReactDOM.createRoot(container).render(<TypeApp />);
+    </script>
+  </body>
+</html>

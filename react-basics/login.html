@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+    <style>
+      .input-boxes {
+        padding: 12px 15px;
+        border-radius: 5px;
+        font-size: 15px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 250px;
+      }
+      .main-buttons {
+        background-color: rgb(0, 123, 255);
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 15px;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-right: 5px;
+      }
+      .hide-button {
+        background-color: rgb(108, 117, 125);
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 15px;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="js-welcome-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+    <script src="https://unpkg.com/supersimpledev/chatbot.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+      function WelcomePart({ isShown, setIsShown }) {
+        function handleClick() {
+          console.log("Clicked");
+          setIsShown(!isShown);
+        }
+
+        return (
+          <div>
+            <h1>Hoş geldiniz</h1>
+            <input placeholder="Email" className="input-boxes" />
+            <br></br>
+            <input
+              placeholder="Şifre"
+              type={!isShown ? "text" : "password"}
+              className="input-boxes"
+            />
+            <button className="hide-button" onClick={handleClick}>
+              {!isShown ? "Gizle" : "Göster"}
+            </button>
+            <br></br>
+            <button className="main-buttons">Giriş</button>
+            <button className="main-buttons">Kayıt Ol</button>
+            <br></br>
+            <br></br>
+          </div>
+        );
+      }
+
+      function LoginApp() {
+        const [isShown, setIsShown] = React.useState(false);
+
+        return (
+          <>
+            <WelcomePart isShown={isShown} setIsShown={setIsShown} />
+          </>
+        );
+      }
+
+      const container = document.querySelector(".js-welcome-container");
+
+      ReactDOM.createRoot(container).render(<LoginApp />);
+      //üstte hangisi gözüksün istiyorsan en başta div içinde class tanımlarken onu yazıyorsun
+    </script>
+  </body>
+</html>

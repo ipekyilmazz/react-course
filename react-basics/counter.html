@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Counter</title>
+    <style>
+      body {
+        font-family: Arial;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+      .on-off-button {
+        background-color: rgb(25, 135, 84);
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .on-off-button-off {
+        background-color: rgb(220, 53, 69);
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .button-style {
+        background-color: rgb(25, 135, 84);
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-right: 5px;
+      }
+      .counter-button-container {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        height: 100vh;
+        align-items: center;
+        background-color: aliceblue;
+      }
+      .reset-button-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="js-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+      function CounterButton({ count, setCount }) {
+        function handleClick() {
+          console.log("Clicked");
+          setCount(count + 1);
+        }
+
+        return (
+          <button onClick={handleClick} className="button-style">
+            Clicked {count} {count === 1 ? "Time" : "Times"}
+          </button>
+        );
+      }
+
+      function OnOffButton({ isOn, setIsOn }) {
+        function handleClick() {
+          setIsOn(!isOn);
+        }
+
+        return (
+          <button
+            onClick={handleClick}
+            className={isOn ? "on-off-button" : "on-off-button-off"}
+          >
+            {isOn ? "ON" : "OFF"}
+          </button>
+        );
+      }
+
+      function ResetButton({ setCount }) {
+        function handleReset() {
+          setCount(0);
+        }
+
+        return (
+          <div className="reset-button-container">
+            <button onClick={handleReset} className="button-style">
+              Reset
+            </button>
+            <button onClick={handleReset} className="button-style">
+              Reset
+            </button>
+          </div>
+        );
+      }
+
+      function AutoClickButton({ setCount }) {
+        const buttonRef = React.useRef(null);
+
+        function handleAutoClick() {
+          setInterval(() => {
+            if (buttonRef.current) {
+              buttonRef.current.click();
+            }
+          }, 1000);
+        }
+        return (
+          <button
+            onClick={handleAutoClick}
+            ref={buttonRef}
+            className="button-style"
+          >
+            Auto Click
+          </button>
+        );
+      }
+      function CounterApp() {
+        const [count, setCount] = React.useState(0);
+        const [isOn, setIsOn] = React.useState(true);
+
+        // function handleClick() {
+        //   console.log("Clicked");
+        //   setCount(count + 1);
+        // }
+        // return (
+        //   <>
+        //     <button onClick={handleClick}>
+        //       Clicked {count} {count === 1 ? "Time" : "Times"}
+        //     </button>
+        //   </>
+        // );
+        return (
+          <>
+            <OnOffButton isOn={isOn} setIsOn={setIsOn} />
+            <div className="counter-button-container">
+              <CounterButton count={count} setCount={setCount} />
+              <ResetButton setCount={setCount} />
+              <AutoClickButton setCount={setCount} />
+            </div>
+          </>
+        );
+      }
+
+      const container = document.querySelector(".js-container");
+
+      ReactDOM.createRoot(container).render(<CounterApp />);
+    </script>
+  </body>
+</html>
