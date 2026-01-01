@@ -1,10 +1,12 @@
 import { Header } from "../components/Header";
 import "./OrdersPage.css";
+import { Link } from "react-router";
 export function OrdersPage() {
   return (
     <>
       <title>Orders</title>
       <Header />
+      <link rel="icon" type="image/svg+xml" href="orders-favicon.png" />
       <div className="orders-page">
         <div className="page-title">Your Orders</div>
 
@@ -51,11 +53,11 @@ export function OrdersPage() {
               </div>
 
               <div className="product-actions">
-                <a href="/tracking">
+                <Link href="/tracking">
                   <button className="track-package-button button-secondary">
                     Track package
                   </button>
-                </a>
+                </Link>
               </div>
 
               <div className="product-image-container">
@@ -80,11 +82,11 @@ export function OrdersPage() {
               </div>
 
               <div className="product-actions">
-                <a href="/tracking">
+                <Link href="/tracking">
                   <button className="track-package-button button-secondary">
                     Track package
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -129,11 +131,11 @@ export function OrdersPage() {
               </div>
 
               <div className="product-actions">
-                <a href="/tracking">
+                <Link href="/tracking">
                   <button className="track-package-button button-secondary">
                     Track package
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
