@@ -6,7 +6,7 @@ import { CheckoutHeader } from "./CheckoutHeader";
 import { formatMoney } from "../../utils/money";
 import { CartItemDetails } from "./CartItemDetails";
 import { DeliveryDate } from "./DeliveryDate.jsx";
-export function CheckoutPage({ cart }) {
+export function CheckoutPage({ cart, loadCart }) {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummary, setPaymentSummary] = useState(null);
   useEffect(() => {
@@ -22,7 +22,7 @@ export function CheckoutPage({ cart }) {
     };
 
     fetchCheckoutData();
-  }, []);
+  }, [cart]);
 
   return (
     <>
@@ -56,11 +56,18 @@ export function CheckoutPage({ cart }) {
                               deliveryOption.priceCents
                             )} - Shipping`;
                           }
-
+                          const updateDeliveryOption = async () => {
+                            await axios.put(
+                              `/api/cart-items/${cartItem.productId}`,
+                              { deliveryOptionId: deliveryOption.id }
+                            );
+                            await loadCart();
+                          };
                           return (
                             <div
                               key={deliveryOption.id}
                               className="delivery-option"
+                              onClick={updateDeliveryOption}
                             >
                               <input
                                 type="radio"
@@ -68,6 +75,7 @@ export function CheckoutPage({ cart }) {
                                   deliveryOption.id ===
                                   cartItem.deliveryOptionId
                                 }
+                                onChange={() => {}}
                                 className="delivery-option-input"
                                 name={`delivery-option-${cartItem.productId}`}
                               />
