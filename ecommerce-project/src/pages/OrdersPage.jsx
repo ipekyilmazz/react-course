@@ -8,9 +8,11 @@ import { formatMoney } from "../utils/money";
 export function OrdersPage({ cart }) {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    axios.get("/api/orders?expand=products").then((response) => {
+    const fetchOrderData = async () => {
+      const response = await axios.get("/api/orders?expand=products");
       setOrders(response.data);
-    });
+    };
+    fetchOrderData();
   }, []);
   return (
     <>
@@ -74,11 +76,13 @@ export function OrdersPage({ cart }) {
                         </div>
 
                         <div className="product-actions">
-                          <Link href="/tracking">
+                          <a
+                            href={`/tracking/${order.id}/${orderProduct.product.id}`}
+                          >
                             <button className="track-package-button button-secondary">
                               Track package
                             </button>
-                          </Link>
+                          </a>
                         </div>
                       </Fragment>
                     );
