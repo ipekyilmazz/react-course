@@ -43,7 +43,10 @@ export function CheckoutPage({ cart, loadCart }) {
                       deliveryOptions={deliveryOptions}
                     />
                     <div className="cart-item-details-grid">
-                      <CartItemDetails cartItem={cartItem} />
+                      <CartItemDetails
+                        cartItem={cartItem}
+                        loadCart={loadCart}
+                      />
                       <div className="delivery-options">
                         <div className="delivery-options-title">
                           Choose a delivery option:
