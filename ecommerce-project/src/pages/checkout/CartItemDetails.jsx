@@ -10,7 +10,7 @@ export function CartItemDetails({ cartItem }) {
         </div>
         <div className="product-quantity">
           <span>
-            Quantity:{" "}
+            Quantity: {cartItem.quantity}
             <span className="quantity-label">{cartItem.product.quantity}</span>
           </span>
           <span className="update-quantity-link link-primary">Update</span>
