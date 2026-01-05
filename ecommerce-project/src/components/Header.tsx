@@ -1,9 +1,11 @@
-import { Link, NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import "./header.css";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
-
-export function Header({ cart }) {
+type HeaderProps = {
+  cart: { productId: string; quantity: number; deliveryOptionId: string }[];
+};
+export function Header({ cart }: HeaderProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
