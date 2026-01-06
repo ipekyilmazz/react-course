@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router";
 import "./header.css";
 import { useState } from "react";
+import type { ChangeEvent } from "react";
 import { useSearchParams } from "react-router";
 type HeaderProps = {
   cart: { productId: string; quantity: number; deliveryOptionId: string }[];
@@ -16,7 +17,7 @@ export function Header({ cart }: HeaderProps) {
   // || '' is a shortcut. It means if searchText does not exist
   // it will use a default value of ''.
   const [search, setSearch] = useState(searchText || "");
-  const updateSearchInput = (event) => {
+  const updateSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
